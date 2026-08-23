@@ -1,9 +1,7 @@
+import LoginPage from "./pages/LoginPage"
+
 const App = () => {
-  return (
-    <div>
-      <h1> Sport Point </h1>
-    </div>
-  )
+  return <LoginPage />
 }
 
 export default App
