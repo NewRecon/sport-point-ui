@@ -12,7 +12,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "npm install antd react-router-dom @ant-design/icons"
+	"postCreateCommand": "npm install antd react-router-dom @ant-design/icons react-leaflet leaflet && npm install --save-dev @types/leaflet"
 
 	// Configure tool-specific properties.ё
 	// "customizations": {},
