@@ -4,7 +4,7 @@ import type { RegisterValues } from '../components/RegisterForm';
 
 export const authService = {
   async login(values: LoginValues) {
-    const response = await fetch(`${API_BASE_URL}/login`, {
+    const response = await fetch(`${API_BASE_URL}/v1/login`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify(values),
@@ -14,11 +14,11 @@ export const authService = {
     if (!response.ok) {
       throw new Error(data.message || 'Ошибка при входе');
     }
-    return data; // Возвращает данные (например, { token: '...' })
+    return data;
   },
 
   async register(values: RegisterValues) {
-    const response = await fetch(`${API_BASE_URL}/register`, {
+    const response = await fetch(`${API_BASE_URL}/v1/register`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify(values),

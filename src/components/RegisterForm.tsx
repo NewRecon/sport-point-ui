@@ -15,11 +15,11 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
   return (
     <Form layout="vertical" onFinish={onSubmit}>
       <Form.Item
-        label="Имя"
-        name="name"
-        rules={[{ required: true, message: 'Как вас зовут?' }]}
+        label="Логин"
+        name="username"
+        rules={[{ required: true, message: 'Введите логин!' }]}
       >
-        <Input placeholder="Иван" />
+        <Input placeholder="Придумайте логин" />
       </Form.Item>
 
       <Form.Item

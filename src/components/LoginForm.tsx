@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Input, Button } from 'antd';
 
 export interface LoginValues {
-  email: string;
+  username: string;
   password?: string;
 }
 
@@ -14,11 +14,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
   return (
     <Form layout="vertical" onFinish={onSubmit}>
       <Form.Item
-        label="Email"
-        name="email"
-        rules={[{ required: true, type: 'email', message: 'Введите корректный email!' }]}
+        label="Логин"
+        name="username"
+        rules={[{ required: true, message: 'Введите логин!' }]}
       >
-        <Input placeholder="example@mail.com" />
+        <Input placeholder="Введите логин" />
       </Form.Item>
 
       <Form.Item
@@ -26,7 +26,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
         name="password"
         rules={[{ required: true, message: 'Введите пароль!' }]}
       >
-        <Input.Password placeholder="Ваш пароль" />
+        <Input.Password placeholder="Введите пароль" />
       </Form.Item>
 
       <Form.Item>

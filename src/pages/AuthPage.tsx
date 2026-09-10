@@ -23,7 +23,7 @@ const AuthPage: React.FC = () => {
       }
 
       message.success('Успешный вход!');
-      navigate('/profile');
+      navigate('/map');
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Не удалось войти';
       message.error(errorMessage);
@@ -32,9 +32,14 @@ const AuthPage: React.FC = () => {
 
   const onRegisterSubmit = async (values: RegisterValues): Promise<void> => {
     try {
-      await authService.register(values);
-      message.success('Регистрация успешна! Войдите в аккаунт.');
-      navigate('/profile');
+      const data = await authService.register(values);
+
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+      }
+
+      message.success('Регистрация успешна!');
+      navigate('/map');
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Не удалось зарегистрироваться';
       message.error(errorMessage);
