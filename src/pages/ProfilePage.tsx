@@ -43,9 +43,7 @@ const ProfilePage: React.FC = () => {
               {/* Компонент Antd для отображения ключ-значение */}
               <Descriptions bordered column={1} size="middle">
                 <Descriptions.Item label="Имя">{user.name}</Descriptions.Item>
-                <Descriptions.Item label="Email">{user.email}</Descriptions.Item>
-                <Descriptions.Item label="Роль">{user.role}</Descriptions.Item>
-                <Descriptions.Item label="Дата регистрации">{user.regDate}</Descriptions.Item>
+                <Descriptions.Item label="Описание">{user.bio}</Descriptions.Item>
               </Descriptions>
 
               <Button type="default" onClick={() => alert('Редактирование пока не реализовано')}>

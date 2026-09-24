@@ -2,14 +2,12 @@ import { API_BASE_URL, getHeaders } from './config';
 
 export interface UserProfileData {
   name: string;
-  email: string;
-  role: string;
-  regDate: string;
+  bio: string;
 }
 
 export const profileService = {
   async getProfile(): Promise<UserProfileData> {
-    const response = await fetch(`${API_BASE_URL}/profile`, {
+    const response = await fetch(`${API_BASE_URL}/profiles`, {
       method: 'GET',
       headers: getHeaders(), // Тут автоматически прикрепится Authorization: Bearer <token>
     });

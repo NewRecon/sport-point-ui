@@ -4,7 +4,7 @@ import type { RegisterValues } from '../components/RegisterForm';
 
 export const authService = {
   async login(values: LoginValues) {
-    const response = await fetch(`${API_BASE_URL}/v1/login`, {
+    const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify(values),
@@ -18,7 +18,7 @@ export const authService = {
   },
 
   async register(values: RegisterValues) {
-    const response = await fetch(`${API_BASE_URL}/v1/register`, {
+    const response = await fetch(`${API_BASE_URL}/auth/register`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify(values),
