@@ -7,13 +7,13 @@ export interface Participant {
 }
 
 export interface EventData {
-  id: string;
+  id?: string;
   title: string;
   description: string;
   date: string;
   locationName: string;
-  lat: number;  // Широта для карты
-  lng: number;  // Долгота для карты
+  latitude: number;  // Широта для карты
+  longitude: number;  // Долгота для карты
   participants: Participant[];
 }
 
@@ -43,6 +43,18 @@ export const eventService = {
     if (!response.ok) {
       throw new Error(data.message || 'Не удалось загрузить событие');
     }
+    return data;
+  },
+
+  // 3. Метод создания нового ивента
+  async createEvent(event: Omit<EventData, 'participants'>): Promise<EventData> {
+    const response = await fetch(`${API_BASE_URL}/events`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify(event),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message || 'Не удалось создать событие');
     return data;
   }
 };

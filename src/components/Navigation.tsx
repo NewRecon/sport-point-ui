@@ -35,8 +35,8 @@ export const Navigation: React.FC = () => {
       mode="horizontal" 
       selectedKeys={[currentKey]} 
       onClick={handleMenuClick} 
-      items={menuItems} /* <--- Добавили эту строчку, теперь всё применится */
-      style={{ marginBottom: '24px' }}
+      items={menuItems}
+      style={{ marginBottom: '0px' }}
     />
   );
 };
