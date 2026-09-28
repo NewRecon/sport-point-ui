@@ -16,7 +16,6 @@ export const EventSidebar: React.FC<EventSidebarProps> = ({ events, onCreateClic
 
   return (
     <div style={{ width: '100%' }}>
-      {/* Шапка виджета с кнопкой создания */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
         <Title level={5} style={{ margin: 0 }}>События поблизости</Title>
         <Button 
@@ -30,7 +29,6 @@ export const EventSidebar: React.FC<EventSidebarProps> = ({ events, onCreateClic
       
       <List
         dataSource={events}
-        /* ИСПРАВЛЕНО: Меняем стандартный No Data на понятный текст и кнопку */
         locale={{
           emptyText: (
             <Empty

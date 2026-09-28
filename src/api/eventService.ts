@@ -3,17 +3,17 @@ import { API_BASE_URL, getHeaders } from './config';
 export interface Participant {
   id: string;
   name: string;
-  email: string;
 }
 
 export interface EventData {
   id?: string;
   title: string;
+  locationName: string;
+  latitude: number;
+  longitude: number;
   description: string;
   date: string;
-  locationName: string;
-  latitude: number;  // Широта для карты
-  longitude: number;  // Долгота для карты
+  totalParticipants: number;
   participants: Participant[];
 }
 

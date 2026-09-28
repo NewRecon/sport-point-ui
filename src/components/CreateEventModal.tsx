@@ -1,13 +1,13 @@
 import React from 'react';
-import { Modal, Form, Input, DatePicker } from 'antd';
+import { Modal, Form, Input, DatePicker, InputNumber } from 'antd'; // Добавили InputNumber
 import type { Dayjs } from 'dayjs';
 
-// Описываем типы полей, которые придут из формы
 export interface CreateEventFormValues {
   title: string;
   description: string;
-  date: Dayjs; // Компонент DatePicker возвращает объект Dayjs
+  date: Dayjs;
   locationName: string;
+  maxParticipants: number;
 }
 
 interface CreateEventModalProps {
@@ -20,12 +20,12 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({ open, onCanc
   const [form] = Form.useForm();
 
   const handleOk = (): void => {
-    form.submit(); // При клике на "Создать" триггерим отправку формы
+    form.submit();
   };
 
   const handleFinish = (values: CreateEventFormValues): void => {
     onSubmit(values);
-    form.resetFields(); // Очищаем поля формы после успешной отправки
+    form.resetFields();
   };
 
   return (
@@ -74,11 +74,26 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({ open, onCanc
         </Form.Item>
 
         <Form.Item 
-          label="Место проведения (текст)" 
+          label="Место проведения (адрес)" 
           name="locationName" 
           rules={[{ required: true, message: 'Укажите адрес!' }]}
         >
           <Input placeholder="Например: Сквер комсомольцев, площадка №1" />
+        </Form.Item>
+
+        {/* ДОБАВЛЯЕМ СЮДА: Числовой ввод для лимита участников */}
+        <Form.Item 
+          label="Максимум участников" 
+          name="maxParticipants" 
+          rules={[{ required: true, message: 'Укажите максимальное количество участников!' }]}
+          initialValue={10} // Значение по умолчанию
+        >
+          <InputNumber 
+            min={2} 
+            max={100} 
+            style={{ width: '100%' }} 
+            placeholder="Например: 10" 
+          />
         </Form.Item>
       </Form>
     </Modal>

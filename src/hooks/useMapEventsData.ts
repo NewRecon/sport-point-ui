@@ -46,14 +46,17 @@ export const useMapEventsData = () => {
     const [latitude, longitude] = selectedCoords || [47.222480, 39.718577];
 
     try {
-      const newEvent = {
-        title: values.title,
-        description: values.description,
-        date: values.date.format('DD.MM.YYYY HH:mm'),
-        locationName: values.locationName,
-        latitude,
-        longitude
-      };
+    const newEvent = {
+      title: values.title,
+      description: values.description,
+      date: values.date.format('YYYY-MM-DDTHH:mm:ss'),
+      locationName: values.locationName,
+      latitude,
+      longitude,
+      maxParticipants: values.maxParticipants,
+      totalParticipants: 0,
+      participants: []
+    }
 
       await eventService.createEvent(newEvent);
       message.success('Событие успешно создано!');
