@@ -32,7 +32,7 @@ export const eventService = {
     return data;
   },
 
-  // 2. Оставляем прошлый метод получения одного ивента (пригодится при клике)
+  // 2. Получение одного ивента
   async getEventById(id: string): Promise<EventData> {
     const response = await fetch(`${API_BASE_URL}/events/${id}`, {
       method: 'GET',

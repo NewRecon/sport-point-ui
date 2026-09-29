@@ -53,8 +53,7 @@ export const useMapEventsData = () => {
       locationName: values.locationName,
       latitude,
       longitude,
-      maxParticipants: values.maxParticipants,
-      totalParticipants: 0,
+      totalParticipants: values.totalParticipants,
       participants: []
     }
 

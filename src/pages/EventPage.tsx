@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Card, Typography, Spin, message, Divider, Space, Tag } from 'antd';
+import { Card, Typography, Spin, message, Divider, Space, Tag, Button } from 'antd';
 import { CalendarOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs'; // Для безопасного форматирования даты бэка
 import { Navigation } from '../components/Navigation';
 import { ParticipantList } from '../components/ParticipantList';
 import { eventService } from '../api/eventService';
@@ -10,7 +11,7 @@ import type { EventData } from '../api/eventService';
 const { Title, Paragraph } = Typography;
 
 const EventPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>(); // Достаем id из урла
+  const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState<boolean>(true);
   const [event, setEvent] = useState<EventData | null>(null);
 
@@ -46,7 +47,8 @@ const EventPage: React.FC = () => {
               <Title level={2} style={{ margin: 0 }}>{event.title}</Title>
               
               <Space size="large" style={{ color: '#8c8c8c' }}>
-                <span><CalendarOutlined /> {event.date}</span>
+                {/* Подгоняем под реалии ISO-даты от Spring Boot */}
+                <span><CalendarOutlined /> {dayjs(event.date).format('DD.MM.YYYY HH:mm')}</span>
                 <span><EnvironmentOutlined /> {event.locationName}</span>
               </Space>
 
@@ -58,11 +60,16 @@ const EventPage: React.FC = () => {
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Title level={4} style={{ margin: 0 }}>Участники</Title>
-                <Tag color="blue">{event.participants.length}</Tag>
+                {/* Защита от undefined: берем длину массива participants, если он пришел */}
+                <Tag color="blue">{event.participants?.length || 0} / {event.totalParticipants}</Tag>
               </div>
 
-              {/* Наш список подписавшихся профилей */}
-              <ParticipantList items={event.participants} />
+              {/* Защита от null: если участников нет, передаем пустой массив */}
+              <ParticipantList items={event.participants || []} />
+
+              <Button type="primary" block style={{ marginTop: '16px' }} onClick={() => alert('Логику отправки запроса сделаем позже')}>
+                Записаться на событие
+              </Button>
 
             </Space>
           ) : (

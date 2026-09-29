@@ -7,7 +7,7 @@ export interface CreateEventFormValues {
   description: string;
   date: Dayjs;
   locationName: string;
-  maxParticipants: number;
+  totalParticipants: number;
 }
 
 interface CreateEventModalProps {
@@ -81,10 +81,9 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({ open, onCanc
           <Input placeholder="Например: Сквер комсомольцев, площадка №1" />
         </Form.Item>
 
-        {/* ДОБАВЛЯЕМ СЮДА: Числовой ввод для лимита участников */}
         <Form.Item 
           label="Максимум участников" 
-          name="maxParticipants" 
+          name="totalParticipants" 
           rules={[{ required: true, message: 'Укажите максимальное количество участников!' }]}
           initialValue={10} // Значение по умолчанию
         >

@@ -23,7 +23,7 @@ const NewLocationIcon = L.icon({
   shadowUrl: shadowUrl,
   iconSize: [25, 41],
   iconAnchor: [12, 41],
-  className: 'new-marker-icon' // Можно добавить стилей, но пока оставим базовой
+  className: 'new-marker-icon'
 });
 
 const { Text } = Typography;
@@ -76,7 +76,6 @@ export const EventMap: React.FC<EventMapProps> = ({ events, selectedCoords, onMa
         {/* Временный маркер в месте клика */}
         {selectedCoords && (
           <Marker position={selectedCoords} icon={NewLocationIcon}>
-            {/* ИСПРАВЛЕНО: Убрали несуществующий параметр autoOpen */}
             <Popup>
               <div style={{ textAlign: 'center', padding: '4px' }}>
                 <Text strong>Выбрано новое место</Text>
