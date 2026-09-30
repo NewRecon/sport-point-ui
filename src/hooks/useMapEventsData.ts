@@ -47,6 +47,7 @@ export const useMapEventsData = () => {
 
     try {
     const newEvent = {
+      id: "",
       title: values.title,
       description: values.description,
       date: values.date.format('YYYY-MM-DDTHH:mm:ss'),
@@ -54,7 +55,7 @@ export const useMapEventsData = () => {
       latitude,
       longitude,
       totalParticipants: values.totalParticipants,
-      participants: []
+      currentParticipants: 0
     }
 
       await eventService.createEvent(newEvent);

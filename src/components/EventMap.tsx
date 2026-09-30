@@ -47,7 +47,7 @@ const MapClickHandler: React.FC<{ onMapClick: (coords: [number, number]) => void
 
 export const EventMap: React.FC<EventMapProps> = ({ events, selectedCoords, onMapClick, onCreateAtCoords }) => {
   const navigate = useNavigate();
-  const defaultPosition: [number, number] = [47.222480, 39.718577]; // Ростов
+  const defaultPosition: [number, number] = [47.222480, 39.718577];
 
   return (
     <div style={{ height: 'calc(100vh - 48px)', width: '100%', position: 'relative' }}>

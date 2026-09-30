@@ -48,7 +48,7 @@ export const EventSidebar: React.FC<EventSidebarProps> = ({ events, onCreateClic
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
               <Text strong style={{ fontSize: '15px' }}>{event.title}</Text>
-              <Badge count={event.participants?.length || 0} color="#1677ff">
+              <Badge count={event.totalParticipants || 0} color="#1677ff">
                 <span style={{ paddingRight: '4px' }}><TeamOutlined style={{ color: '#8c8c8c' }} /></span>
               </Badge>
             </div>

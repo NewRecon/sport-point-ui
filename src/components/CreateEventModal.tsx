@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Form, Input, DatePicker, InputNumber } from 'antd'; // Добавили InputNumber
+import { Modal, Form, Input, DatePicker, InputNumber } from 'antd';
 import type { Dayjs } from 'dayjs';
 
 export interface CreateEventFormValues {
@@ -85,7 +85,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({ open, onCanc
           label="Максимум участников" 
           name="totalParticipants" 
           rules={[{ required: true, message: 'Укажите максимальное количество участников!' }]}
-          initialValue={10} // Значение по умолчанию
+          initialValue={10}
         >
           <InputNumber 
             min={2} 

@@ -4,9 +4,9 @@ import { Card, Typography, Spin, message, Divider, Space, Tag, Button } from 'an
 import { CalendarOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs'; // Для безопасного форматирования даты бэка
 import { Navigation } from '../components/Navigation';
-import { ParticipantList } from '../components/ParticipantList';
 import { eventService } from '../api/eventService';
 import type { EventData } from '../api/eventService';
+import { subscriptionService, type SubscriptionData } from '../api/subscriptionService';
 
 const { Title, Paragraph } = Typography;
 
@@ -33,6 +33,16 @@ const EventPage: React.FC = () => {
     fetchEvent();
   }, [id]);
 
+  const onSubscribeSubmit = async (subscriptionData: SubscriptionData) => {
+    try {
+      await subscriptionService.subscribe(subscriptionData);
+      message.success('Вы записались на событие!');
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Не удалось записаться';
+      message.error(errorMessage);
+    }
+  };
+
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#f0f2f5' }}>
       <Navigation />
@@ -47,7 +57,6 @@ const EventPage: React.FC = () => {
               <Title level={2} style={{ margin: 0 }}>{event.title}</Title>
               
               <Space size="large" style={{ color: '#8c8c8c' }}>
-                {/* Подгоняем под реалии ISO-даты от Spring Boot */}
                 <span><CalendarOutlined /> {dayjs(event.date).format('DD.MM.YYYY HH:mm')}</span>
                 <span><EnvironmentOutlined /> {event.locationName}</span>
               </Space>
@@ -61,13 +70,10 @@ const EventPage: React.FC = () => {
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Title level={4} style={{ margin: 0 }}>Участники</Title>
                 {/* Защита от undefined: берем длину массива participants, если он пришел */}
-                <Tag color="blue">{event.participants?.length || 0} / {event.totalParticipants}</Tag>
+                <Tag color="blue">{event.currentParticipants || 0} / {event.totalParticipants}</Tag>
               </div>
 
-              {/* Защита от null: если участников нет, передаем пустой массив */}
-              <ParticipantList items={event.participants || []} />
-
-              <Button type="primary" block style={{ marginTop: '16px' }} onClick={() => alert('Логику отправки запроса сделаем позже')}>
+              <Button type="primary" block style={{ marginTop: '16px' }} onClick={()=>onSubscribeSubmit({ eventId: event.id })}>
                 Записаться на событие
               </Button>
 
