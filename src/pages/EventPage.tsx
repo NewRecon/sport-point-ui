@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Card, Typography, Spin, message, Divider, Space, Tag, Button } from 'antd';
-import { CalendarOutlined, EnvironmentOutlined } from '@ant-design/icons';
-import dayjs from 'dayjs'; // Для безопасного форматирования даты бэка
+import { useParams, Link } from 'react-router-dom';
+import { Card, Typography, Spin, message, Divider, Space, Tag, Button, List } from 'antd';
+import { CalendarOutlined, EnvironmentOutlined, UserOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
 import { Navigation } from '../components/Navigation';
 import { eventService } from '../api/eventService';
 import type { EventData } from '../api/eventService';
@@ -53,9 +53,9 @@ const EventPage: React.FC = () => {
             <div style={{ textAlign: 'center', padding: '40px 0' }}><Spin size="large" /></div>
           ) : event ? (
             <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-              
+
               <Title level={2} style={{ margin: 0 }}>{event.title}</Title>
-              
+
               <Space size="large" style={{ color: '#8c8c8c' }}>
                 <span><CalendarOutlined /> {dayjs(event.date).format('DD.MM.YYYY HH:mm')}</span>
                 <span><EnvironmentOutlined /> {event.locationName}</span>
@@ -69,11 +69,45 @@ const EventPage: React.FC = () => {
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Title level={4} style={{ margin: 0 }}>Участники</Title>
-                {/* Защита от undefined: берем длину массива participants, если он пришел */}
-                <Tag color="blue">{event.currentParticipants || 0} / {event.totalParticipants}</Tag>
+                <Tag color="blue">
+                  {event.eventSubscriptions?.length || 0} / {event.totalParticipants}
+                </Tag>
               </div>
 
-              <Button type="primary" block style={{ marginTop: '16px' }} onClick={()=>onSubscribeSubmit({ eventId: event.id })}>
+              {event.eventSubscriptions && event.eventSubscriptions.length > 0 ? (
+                <List
+                  size="small"
+                  dataSource={event.eventSubscriptions}
+                  renderItem={(sub) => (
+                    <List.Item style={{ padding: '8px 0', borderBottom: '1px solid #f0f0f0' }}>
+                      <Link
+                        to={`/profile/${sub.userId}`}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          color: '#1677ff',
+                          fontSize: '15px',
+                        }}
+                      >
+                        <UserOutlined />
+                        {sub.username}
+                      </Link>
+                    </List.Item>
+                  )}
+                />
+              ) : (
+                <Paragraph type="secondary" style={{ margin: 0 }}>
+                  Пока никто не записался
+                </Paragraph>
+              )}
+
+              <Button
+                type="primary"
+                block
+                style={{ marginTop: '16px' }}
+                onClick={() => onSubscribeSubmit({ eventId: event.id })}
+              >
                 Записаться на событие
               </Button>
 

@@ -1,5 +1,10 @@
 import { API_BASE_URL, getHeaders } from './config';
 
+export interface EventSubscription {
+  userId: string;
+  username: string;
+}
+
 export interface EventData {
   id: string;
   title: string;
@@ -8,8 +13,9 @@ export interface EventData {
   longitude: number;
   description: string;
   date: string;
+  ownerId: string;
   totalParticipants: number;
-  currentParticipants: number;
+  eventSubscriptions: EventSubscription[];
 }
 
 export const eventService = {

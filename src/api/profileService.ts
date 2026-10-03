@@ -35,5 +35,20 @@ export const profileService = {
     }
 
     return data;
+  },
+
+  async getUserProfile(userId: string): Promise<UserProfileData> {
+    const response = await fetch(`${API_BASE_URL}/profiles/user/${userId}`, {
+      method: 'GET',
+      headers: getHeaders(),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Не удалось загрузить профиль');
+    }
+
+    return data;
   }
 };
