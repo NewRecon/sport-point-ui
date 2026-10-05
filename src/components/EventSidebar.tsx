@@ -1,31 +1,93 @@
 import React from 'react';
-import { Card, List, Typography, Badge, Button, Empty } from 'antd';
+import { Card, List, Typography, Badge, Button, Empty, Flex, Grid, Tag } from 'antd'; // Добавили Tag
 import { CalendarOutlined, EnvironmentOutlined, TeamOutlined, PlusOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import type { Dayjs } from 'dayjs';
 import type { EventData } from '../api/eventService';
+import { EventFilters } from './EventFilters';
 
 const { Title, Text } = Typography;
 
+type DateRangeType = [Dayjs | null, Dayjs | null];
+
 interface EventSidebarProps {
   events: EventData[];
-  onCreateClick: () => void; // Добавили проп для открытия модалки
+  onCreateClick: () => void;
+  selectedCategory: string | null;
+  onCategoryChange: (category: string | null) => void;
+  dateRange: DateRangeType | null;
+  onDateRangeChange: (dates: DateRangeType | null) => void;
 }
 
-export const EventSidebar: React.FC<EventSidebarProps> = ({ events, onCreateClick }) => {
+const getCategoryLabel = (category: string) => {
+  switch (category) {
+    case 'EXERCISE': return { text: 'Тренировка', color: 'blue' };
+    case 'COMPETITION': return { text: 'Соревнование', color: 'volcano' };
+    case 'GAME': return { text: 'Игра', color: 'green' };
+    case 'MARATHON': return { text: 'Марафон', color: 'gold' };
+    case 'FESTIVAL': return { text: 'Фестиваль', color: 'purple' };
+    default: return { text: category, color: 'default' };
+  }
+};
+
+export const EventSidebar: React.FC<EventSidebarProps> = ({ 
+  events, 
+  onCreateClick,
+  selectedCategory,
+  onCategoryChange,
+  dateRange,
+  onDateRangeChange
+}) => {
   const navigate = useNavigate();
+  const screens = Grid.useBreakpoint();
+  const isDesktop = screens.md;
 
   return (
     <div style={{ width: '100%' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-        <Title level={5} style={{ margin: 0 }}>События поблизости</Title>
-        <Button 
-          type="primary" 
-          shape="circle" 
-          icon={<PlusOutlined />} 
-          onClick={onCreateClick}
-          title="Создать новое событие"
-        />
-      </div>
+      <Flex 
+        vertical={!isDesktop} 
+        gap={isDesktop ? '0' : '12px'} 
+        style={{ marginBottom: '16px' }}
+      >
+        <Flex justify="space-between" align="center" style={{ width: '100%' }}>
+          <Title level={5} style={{ margin: 0 }}>События поблизости</Title>
+          {!isDesktop && (
+            <Button 
+              type="primary" 
+              shape="circle" 
+              icon={<PlusOutlined />} 
+              onClick={onCreateClick}
+              title="Создать новое событие"
+            />
+          )}
+        </Flex>
+        
+        <Flex 
+          align="center" 
+          gap="8px" 
+          justify={isDesktop ? "end" : "stretch"}
+          style={{ width: isDesktop ? 'auto' : '100%' }}
+        >
+          <div style={{ width: isDesktop ? 'auto' : '100%' }}>
+            <EventFilters 
+              selectedCategory={selectedCategory}
+              onCategoryChange={onCategoryChange}
+              dateRange={dateRange}
+              onDateRangeChange={onDateRangeChange}
+            />
+          </div>
+          
+          {isDesktop && (
+            <Button 
+              type="primary" 
+              shape="circle" 
+              icon={<PlusOutlined />} 
+              onClick={onCreateClick}
+              title="Создать новое событие"
+            />
+          )}
+        </Flex>
+      </Flex>
       
       <List
         dataSource={events}
@@ -39,26 +101,37 @@ export const EventSidebar: React.FC<EventSidebarProps> = ({ events, onCreateClic
             </Empty>
           )
         }}
-        renderItem={(event) => (
-          <Card 
-            hoverable 
-            style={{ marginBottom: '10px', borderColor: '#f0f0f0' }}
-            styles={{ body: { padding: '12px' } }}
-            onClick={() => navigate(`/event/${event.id}`)}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
-              <Text strong style={{ fontSize: '15px' }}>{event.title}</Text>
-              <Badge count={event.totalParticipants || 0} color="#1677ff">
-                <span style={{ paddingRight: '4px' }}><TeamOutlined style={{ color: '#8c8c8c' }} /></span>
-              </Badge>
-            </div>
-            
-            <div style={{ marginTop: '6px', color: '#8c8c8c', fontSize: '12px' }}>
-              <div><CalendarOutlined /> {event.date}</div>
-              <div style={{ marginTop: '2px' }}><EnvironmentOutlined /> {event.locationName}</div>
-            </div>
-          </Card>
-        )}
+        renderItem={(event) => {
+          // Получаем настройки стиля тега для текущего ивента
+          const categoryMeta = getCategoryLabel(event.category);
+
+          return (
+            <Card 
+              hoverable 
+              style={{ marginBottom: '10px', borderColor: '#f0f0f0' }}
+              styles={{ body: { padding: '12px' } }}
+              onClick={() => navigate(`/event/${event.id}`)}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
+                <Text strong style={{ fontSize: '15px' }}>{event.title}</Text>
+                <Badge count={event.totalParticipants || 0} color="#1677ff">
+                  <span style={{ paddingRight: '4px' }}><TeamOutlined style={{ color: '#8c8c8c' }} /></span>
+                </Badge>
+              </div>
+              
+              <div style={{ marginTop: '6px', color: '#8c8c8c', fontSize: '12px' }}>
+                <div><CalendarOutlined /> {event.date}</div>
+                <div style={{ marginTop: '2px' }}><EnvironmentOutlined /> {event.locationName}</div>
+              </div>
+
+              <div style={{ marginTop: '8px' }}>
+                <Tag color={categoryMeta.color} style={{ fontSize: '11px', borderRadius: '4px' }}>
+                  {categoryMeta.text}
+                </Tag>
+              </div>
+            </Card>
+          );
+        }}
       />
     </div>
   );

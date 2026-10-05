@@ -1,11 +1,20 @@
 import React from 'react';
-import { Modal, Form, Input, DatePicker, InputNumber } from 'antd';
+import { Modal, Form, Input, DatePicker, InputNumber, Select } from 'antd';
 import type { Dayjs } from 'dayjs';
+
+const EVENT_CATEGORIES = [
+  { value: 'EXERCISE', label: 'Тренировка' },
+  { value: 'COMPETITION', label: 'Соревнование' },
+  { value: 'GAME', label: 'Игра' },
+  { value: 'MARATHON', label: 'Марафон' },
+  { value: 'FESTIVAL', label: 'Фестиваль' },
+];
 
 export interface CreateEventFormValues {
   title: string;
   description: string;
   date: Dayjs;
+  category: string;
   locationName: string;
   totalParticipants: number;
 }
@@ -50,6 +59,17 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({ open, onCanc
           rules={[{ required: true, message: 'Введите название!' }]}
         >
           <Input placeholder="Например: Футбольный матч 5х5" />
+        </Form.Item>
+
+        <Form.Item 
+          label="Категория события" 
+          name="category" 
+          rules={[{ required: true, message: 'Выберите категорию!' }]}
+        >
+          <Select 
+            placeholder="Выберите тип активности" 
+            options={EVENT_CATEGORIES} 
+          />
         </Form.Item>
 
         <Form.Item 
