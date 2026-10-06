@@ -41,7 +41,7 @@ export const useMapEventsData = (): MapEventsDataResult => {
 
   useEffect(() => {
     let ignore = false;
-    
+
     const fetchFilteredData = async () => {
       try {
         setLoading(true);
@@ -55,7 +55,7 @@ export const useMapEventsData = (): MapEventsDataResult => {
         };
 
         const data = await eventService.getAllEvents(filters);
-        
+
         if (!ignore) {
           setEvents(data);
         }
@@ -91,18 +91,18 @@ export const useMapEventsData = (): MapEventsDataResult => {
       const queryString = params.join('&');
 
       const openstreetmapUrl = 'https://nominatim.openstreetmap.org/reverse?' + queryString;
-      
-      const response = await fetch(openstreetmapUrl.toString(), { 
-        headers: { 'User-Agent': 'SportsEventApp/1.0' } 
+
+      const response = await fetch(openstreetmapUrl.toString(), {
+        headers: { 'User-Agent': 'SportsEventApp/1.0' }
       });
 
       const data = await response.json();
-      
+
       if (data && data.address) {
         const city = data.address.city || data.address.town || data.address.village || '';
         const road = data.address.road || '';
         const houseNumber = data.address.house_number || '';
-        
+
         const addressParts = [city, road, houseNumber].filter(Boolean);
         setAddress(addressParts.join(', ') || data.display_name);
       } else {
@@ -142,7 +142,7 @@ export const useMapEventsData = (): MapEventsDataResult => {
         latitude,
         longitude,
         totalParticipants: values.totalParticipants,
-        currentParticipants: 0
+        isCreatorParticipant: values.isCreatorParticipant,
       };
 
       await eventService.createEvent(newEvent);

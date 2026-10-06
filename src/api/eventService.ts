@@ -25,6 +25,18 @@ export interface EventFilterParams {
   dateTo?: string | null;
 }
 
+export interface CreateEventPayload {
+  title: string;
+  locationName: string;
+  latitude: number;
+  longitude: number;
+  description: string;
+  date: string;
+  category: string;
+  totalParticipants: number;
+  isCreatorParticipant: boolean;
+}
+
 export const eventService = {
   async getAllEvents(filters?: EventFilterParams): Promise<EventData[]> {
     const queryParams = new URLSearchParams();
@@ -67,16 +79,16 @@ export const eventService = {
     return data;
   },
 
-  async createEvent(
-    event: Omit<EventData, 'id' | 'ownerId' | 'eventSubscriptions'>
-  ): Promise<EventData> {
+  async createEvent(event: CreateEventPayload): Promise<EventData> {
     const response = await fetch(`${API_BASE_URL}/events`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify(event),
     });
     const data = await response.json();
-    if (!response.ok) throw new Error(data.message || 'Не удалось создать событие');
+    if (!response.ok) {
+      throw new Error(data.message || 'Не удалось создать событие');
+    }
     return data;
-  }
+  },
 };

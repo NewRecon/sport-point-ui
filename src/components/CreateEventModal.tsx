@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Modal, Form, Input, DatePicker, InputNumber, Select } from 'antd';
+import { Modal, Form, Input, DatePicker, InputNumber, Select, Switch } from 'antd';
 import type { Dayjs } from 'dayjs';
 
 const EVENT_CATEGORIES = [
@@ -17,6 +17,7 @@ export interface CreateEventFormValues {
   category: string;
   locationName: string;
   totalParticipants: number;
+  isCreatorParticipant: boolean;
 }
 
 interface CreateEventModalProps {
@@ -26,11 +27,11 @@ interface CreateEventModalProps {
   initialAddress?: string;
 }
 
-export const CreateEventModal: React.FC<CreateEventModalProps> = ({ 
-  open, 
-  onCancel, 
-  onSubmit, 
-  initialAddress 
+export const CreateEventModal: React.FC<CreateEventModalProps> = ({
+  open,
+  onCancel,
+  onSubmit,
+  initialAddress,
 }) => {
   const [form] = Form.useForm();
 
@@ -59,72 +60,90 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
       cancelText="Отмена"
       destroyOnClose
     >
-      <Form 
-        form={form} 
-        layout="vertical" 
-        onFinish={handleFinish} 
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={handleFinish}
         style={{ marginTop: '16px' }}
       >
-        <Form.Item 
-          label="Название события" 
-          name="title" 
+        <Form.Item
+          label="Название события"
+          name="title"
           rules={[{ required: true, message: 'Введите название!' }]}
         >
           <Input placeholder="Например: Футбольный матч 5х5" />
         </Form.Item>
 
-        <Form.Item 
-          label="Категория события" 
-          name="category" 
+        <Form.Item
+          label="Категория события"
+          name="category"
           rules={[{ required: true, message: 'Выберите категорию!' }]}
         >
-          <Select 
-            placeholder="Выберите тип активности" 
-            options={EVENT_CATEGORIES} 
+          <Select
+            placeholder="Выберите тип активности"
+            options={EVENT_CATEGORIES}
           />
         </Form.Item>
 
-        <Form.Item 
-          label="Описание" 
-          name="description" 
+        <Form.Item
+          label="Описание"
+          name="description"
           rules={[{ required: true, message: 'Добавьте описание!' }]}
         >
-          <Input.TextArea placeholder="Где собираетесь, какой инвентарь брать..." rows={3} />
-        </Form.Item>
-
-        <Form.Item 
-          label="Дата и время" 
-          name="date" 
-          rules={[{ required: true, message: 'Выберите дату!' }]}
-        >
-          <DatePicker 
-            showTime 
-            format="DD.MM.YYYY HH:mm" 
-            style={{ width: '100%' }} 
-            placeholder="Выберите день и время" 
+          <Input.TextArea
+            placeholder="Где собираетесь, какой инвентарь брать..."
+            rows={3}
           />
         </Form.Item>
 
-        <Form.Item 
-          label="Место проведения (адрес)" 
-          name="locationName" 
+        <Form.Item
+          label="Дата и время"
+          name="date"
+          rules={[{ required: true, message: 'Выберите дату!' }]}
+        >
+          <DatePicker
+            showTime
+            format="DD.MM.YYYY HH:mm"
+            style={{ width: '100%' }}
+            placeholder="Выберите день и время"
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Место проведения (адрес)"
+          name="locationName"
           rules={[{ required: true, message: 'Укажите адрес!' }]}
         >
           <Input placeholder="Например: Сквер комсомольцев, площадка №1" />
         </Form.Item>
 
-        <Form.Item 
-          label="Максимум участников" 
-          name="totalParticipants" 
-          rules={[{ required: true, message: 'Укажите максимальное количество участников!' }]}
+        <Form.Item
+          label="Максимум участников"
+          name="totalParticipants"
+          rules={[
+            {
+              required: true,
+              message: 'Укажите максимальное количество участников!',
+            },
+          ]}
           initialValue={10}
         >
-          <InputNumber 
-            min={2} 
-            max={100} 
-            style={{ width: '100%' }} 
-            placeholder="Например: 10" 
+          <InputNumber
+            min={2}
+            max={100}
+            style={{ width: '100%' }}
+            placeholder="Например: 10"
           />
+        </Form.Item>
+
+        <Form.Item
+          label="Я буду участвовать в этом событии"
+          name="isCreatorParticipant"
+          valuePropName="checked"
+          initialValue={true}
+          style={{ marginBottom: 0 }}
+        >
+          <Switch checkedChildren="Да" unCheckedChildren="Нет" />
         </Form.Item>
       </Form>
     </Modal>
