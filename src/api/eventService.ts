@@ -15,6 +15,7 @@ export interface EventData {
   date: string;
   category: string;
   ownerId: string;
+  ownerName: string;
   totalParticipants: number;
   eventSubscriptions: EventSubscription[];
 }

@@ -32,6 +32,7 @@ interface EventMapProps {
   selectedCoords: [number, number] | null;
   onMapClick: (coords: [number, number]) => void;
   onCreateAtCoords: () => void;
+  onClearSelected: () => void;
 }
 
 const MapClickHandler: React.FC<{ onMapClick: (coords: [number, number]) => void }> = ({ onMapClick }) => {
@@ -43,7 +44,13 @@ const MapClickHandler: React.FC<{ onMapClick: (coords: [number, number]) => void
   return null;
 };
 
-export const EventMap: React.FC<EventMapProps> = ({ events, selectedCoords, onMapClick, onCreateAtCoords }) => {
+export const EventMap: React.FC<EventMapProps> = ({
+  events,
+  selectedCoords,
+  onMapClick,
+  onCreateAtCoords,
+  onClearSelected,
+}) => {
   const navigate = useNavigate();
   const defaultPosition: [number, number] = [47.222480, 39.718577];
 
@@ -54,13 +61,13 @@ export const EventMap: React.FC<EventMapProps> = ({ events, selectedCoords, onMa
           attribution='&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        
+
         <MapClickHandler onMapClick={onMapClick} />
 
         {events.map((event) => (
           <Marker key={event.id} position={[event.latitude, event.longitude]}>
             <Popup>
-              <div style={{ cursor: 'pointer'} } onClick={() => navigate(`/event/${event.id}`)}>
+              <div style={{ cursor: 'pointer' }} onClick={() => navigate(`/event/${event.id}`)}>
                 <strong style={{ color: '#1677ff' }}>{event.title}</strong>
                 <br />
                 <Text type="secondary" style={{ fontSize: '12px' }}>{event.date}</Text>
@@ -71,13 +78,21 @@ export const EventMap: React.FC<EventMapProps> = ({ events, selectedCoords, onMa
 
         {selectedCoords && (
           <Marker position={selectedCoords} icon={NewLocationIcon}>
-            <Popup>
+            <Popup
+              eventHandlers={{
+                remove: () => {
+                  // Срабатывает, когда попап закрывается — в т.ч. по встроенному крестику Leaflet.
+                  // Сбрасываем выбранные координаты, чтобы маркер исчез.
+                  onClearSelected();
+                },
+              }}
+            >
               <div style={{ textAlign: 'center', padding: '4px' }}>
                 <Text strong>Выбрано новое место</Text>
                 <br />
-                <Button 
-                  type="primary" 
-                  size="small" 
+                <Button
+                  type="primary"
+                  size="small"
                   style={{ marginTop: '8px', fontSize: '12px' }}
                   onClick={(e) => {
                     e.stopPropagation();

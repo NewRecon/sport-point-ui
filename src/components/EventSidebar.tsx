@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card, List, Typography, Badge, Button, Empty, Flex, Grid, Tag } from 'antd'; // Добавили Tag
-import { CalendarOutlined, EnvironmentOutlined, TeamOutlined, PlusOutlined } from '@ant-design/icons';
+import { Card, List, Typography, Badge, Empty, Flex, Grid, Tag } from 'antd';
+import { CalendarOutlined, EnvironmentOutlined, TeamOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import type { Dayjs } from 'dayjs';
 import type { EventData } from '../api/eventService';
@@ -12,7 +12,6 @@ type DateRangeType = [Dayjs | null, Dayjs | null];
 
 interface EventSidebarProps {
   events: EventData[];
-  onCreateClick: () => void;
   selectedCategory: string | null;
   onCategoryChange: (category: string | null) => void;
   dateRange: DateRangeType | null;
@@ -30,13 +29,12 @@ const getCategoryLabel = (category: string) => {
   }
 };
 
-export const EventSidebar: React.FC<EventSidebarProps> = ({ 
-  events, 
-  onCreateClick,
+export const EventSidebar: React.FC<EventSidebarProps> = ({
+  events,
   selectedCategory,
   onCategoryChange,
   dateRange,
-  onDateRangeChange
+  onDateRangeChange,
 }) => {
   const navigate = useNavigate();
   const screens = Grid.useBreakpoint();
@@ -44,51 +42,32 @@ export const EventSidebar: React.FC<EventSidebarProps> = ({
 
   return (
     <div style={{ width: '100%' }}>
-      <Flex 
-        vertical={!isDesktop} 
-        gap={isDesktop ? '0' : '12px'} 
+      <Flex
+        vertical={!isDesktop}
+        gap={isDesktop ? '0' : '12px'}
         style={{ marginBottom: '16px' }}
       >
         <Flex justify="space-between" align="center" style={{ width: '100%' }}>
           <Title level={5} style={{ margin: 0 }}>События поблизости</Title>
-          {!isDesktop && (
-            <Button 
-              type="primary" 
-              shape="circle" 
-              icon={<PlusOutlined />} 
-              onClick={onCreateClick}
-              title="Создать новое событие"
-            />
-          )}
         </Flex>
-        
-        <Flex 
-          align="center" 
-          gap="8px" 
-          justify={isDesktop ? "end" : "stretch"}
+
+        <Flex
+          align="center"
+          gap="8px"
+          justify={isDesktop ? 'end' : 'stretch'}
           style={{ width: isDesktop ? 'auto' : '100%' }}
         >
           <div style={{ width: isDesktop ? 'auto' : '100%' }}>
-            <EventFilters 
+            <EventFilters
               selectedCategory={selectedCategory}
               onCategoryChange={onCategoryChange}
               dateRange={dateRange}
               onDateRangeChange={onDateRangeChange}
             />
           </div>
-          
-          {isDesktop && (
-            <Button 
-              type="primary" 
-              shape="circle" 
-              icon={<PlusOutlined />} 
-              onClick={onCreateClick}
-              title="Создать новое событие"
-            />
-          )}
         </Flex>
       </Flex>
-      
+
       <List
         dataSource={events}
         locale={{
@@ -96,17 +75,15 @@ export const EventSidebar: React.FC<EventSidebarProps> = ({
             <Empty
               image={Empty.PRESENTED_IMAGE_SIMPLE}
               description="В вашем городе пока нет событий"
-            >
-              <Button type="link" onClick={onCreateClick}>Создать первое событие</Button>
-            </Empty>
-          )
+            />
+          ),
         }}
         renderItem={(event) => {
           const categoryMeta = getCategoryLabel(event.category);
 
           return (
-            <Card 
-              hoverable 
+            <Card
+              hoverable
               style={{ marginBottom: '10px', borderColor: '#f0f0f0' }}
               styles={{ body: { padding: '12px' } }}
               onClick={() => navigate(`/event/${event.id}`)}
@@ -117,7 +94,7 @@ export const EventSidebar: React.FC<EventSidebarProps> = ({
                   <span style={{ paddingRight: '4px' }}><TeamOutlined style={{ color: '#8c8c8c' }} /></span>
                 </Badge>
               </div>
-              
+
               <div style={{ marginTop: '6px', color: '#8c8c8c', fontSize: '12px' }}>
                 <div><CalendarOutlined /> {event.date}</div>
                 <div style={{ marginTop: '2px' }}><EnvironmentOutlined /> {event.locationName}</div>

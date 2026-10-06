@@ -21,6 +21,7 @@ export interface MapEventsDataResult {
   setSelectedCategory: (category: string | null) => void;
   setDateRange: (dates: DateRangeType | null) => void;
   setAddress: (address: string) => void;
+  clearSelectedCoords: () => void;
   handleCreateSubmit: (values: CreateEventFormValues) => Promise<void>;
   openModalWithDefaultCoords: () => Promise<void>;
   openModalWithCoords: () => Promise<void>;
@@ -89,7 +90,6 @@ export const useMapEventsData = (): MapEventsDataResult => {
       ];
 
       const queryString = params.join('&');
-
       const openstreetmapUrl = 'https://nominatim.openstreetmap.org/reverse?' + queryString;
 
       const response = await fetch(openstreetmapUrl.toString(), {
@@ -102,7 +102,6 @@ export const useMapEventsData = (): MapEventsDataResult => {
         const city = data.address.city || data.address.town || data.address.village || '';
         const road = data.address.road || '';
         const houseNumber = data.address.house_number || '';
-
         const addressParts = [city, road, houseNumber].filter(Boolean);
         setAddress(addressParts.join(', ') || data.display_name);
       } else {
@@ -114,6 +113,11 @@ export const useMapEventsData = (): MapEventsDataResult => {
     } finally {
       setLoadingAddress(false);
     }
+  };
+
+  const clearSelectedCoords = (): void => {
+    setSelectedCoords(null);
+    setAddress('');
   };
 
   const openModalWithCoords = async (): Promise<void> => {
@@ -171,6 +175,7 @@ export const useMapEventsData = (): MapEventsDataResult => {
     setSelectedCategory,
     setDateRange,
     setAddress,
+    clearSelectedCoords,
     handleCreateSubmit,
     openModalWithDefaultCoords,
     openModalWithCoords,

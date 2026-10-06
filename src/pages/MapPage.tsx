@@ -23,8 +23,8 @@ const MapPage: React.FC = () => {
     setDateRange,
     setAddress,
     handleCreateSubmit,
-    openModalWithDefaultCoords,
     openModalWithCoords,
+    clearSelectedCoords,
   } = useMapEventsData();
 
   const screens = Grid.useBreakpoint();
@@ -32,9 +32,8 @@ const MapPage: React.FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
 
   const sidebarContent = (
-    <EventSidebar 
-      events={events} 
-      onCreateClick={openModalWithDefaultCoords}
+    <EventSidebar
+      events={events}
       selectedCategory={selectedCategory}
       onCategoryChange={setSelectedCategory}
       dateRange={dateRange}
@@ -54,16 +53,17 @@ const MapPage: React.FC = () => {
         <div style={{ height: 'calc(100vh - 48px)', width: '100%', position: 'relative' }}>
 
           <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-            <EventMap 
-              events={events} 
-              selectedCoords={selectedCoords} 
-              onMapClick={(coords) => setSelectedCoords(coords)} 
+            <EventMap
+              events={events}
+              selectedCoords={selectedCoords}
+              onMapClick={(coords) => setSelectedCoords(coords)}
               onCreateAtCoords={openModalWithCoords}
+              onClearSelected={clearSelectedCoords}
             />
           </div>
 
           {isDesktop && (
-            <div style={{ 
+            <div style={{
               position: 'absolute',
               top: '20px',
               right: '20px',
@@ -89,9 +89,9 @@ const MapPage: React.FC = () => {
               zIndex: 1000,
               width: 'calc(100vw - 40px)',
             }}>
-              <Button 
-                type="primary" 
-                size="large" 
+              <Button
+                type="primary"
+                size="large"
                 icon={<UnorderedListOutlined />}
                 onClick={() => setIsDrawerOpen(true)}
                 style={{ width: '100%', height: '48px', borderRadius: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.2)' }}
@@ -115,14 +115,14 @@ const MapPage: React.FC = () => {
         </div>
       )}
 
-      <CreateEventModal 
-        open={isModalOpen} 
+      <CreateEventModal
+        open={isModalOpen}
         initialAddress={loadingAddress ? "Определяем адрес..." : address}
         onCancel={() => {
           setIsModalOpen(false);
           setAddress('');
-        }} 
-        onSubmit={handleCreateSubmit} 
+        }}
+        onSubmit={handleCreateSubmit}
       />
     </div>
   );
