@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Spin, Flex, Grid, Button, Drawer } from 'antd';
 import { UnorderedListOutlined } from '@ant-design/icons';
+import { useSearchParams } from 'react-router-dom';
 import { Navigation } from '../components/Navigation';
 import { EventMap } from '../components/EventMap';
 import { EventSidebar } from '../components/EventSidebar';
@@ -8,6 +9,13 @@ import { CreateEventModal } from '../components/CreateEventModal';
 import { useMapEventsData } from '../hooks/useMapEventsData';
 
 const MapPage: React.FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const initialCategory = searchParams.get('category');
+  const initialDateFrom = searchParams.get('dateFrom');
+  const initialDateTo = searchParams.get('dateTo');
+  const initialOnlyAvailable = searchParams.get('onlyAvailable') === '1';
+
   const {
     loading,
     events,
@@ -15,21 +23,41 @@ const MapPage: React.FC = () => {
     selectedCoords,
     selectedCategory,
     dateRange,
+    onlyAvailable,
     address,
     loadingAddress,
     setIsModalOpen,
     setSelectedCoords,
     setSelectedCategory,
     setDateRange,
+    setOnlyAvailable,
     setAddress,
     handleCreateSubmit,
     openModalWithCoords,
     clearSelectedCoords,
-  } = useMapEventsData();
+  } = useMapEventsData({
+    category: initialCategory,
+    dateFrom: initialDateFrom,
+    dateTo: initialDateTo,
+    onlyAvailable: initialOnlyAvailable,
+  });
 
   const screens = Grid.useBreakpoint();
   const isDesktop = screens.md;
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+
+    if (selectedCategory) params.set('category', selectedCategory);
+
+    if (dateRange?.[0]) params.set('dateFrom', dateRange[0].format('YYYY-MM-DD'));
+    if (dateRange?.[1]) params.set('dateTo', dateRange[1].format('YYYY-MM-DD'));
+
+    if (onlyAvailable) params.set('onlyAvailable', '1');
+
+    setSearchParams(params, { replace: true });
+  }, [selectedCategory, dateRange, onlyAvailable, setSearchParams]);
 
   const sidebarContent = (
     <EventSidebar
@@ -38,6 +66,8 @@ const MapPage: React.FC = () => {
       onCategoryChange={setSelectedCategory}
       dateRange={dateRange}
       onDateRangeChange={setDateRange}
+      onlyAvailable={onlyAvailable}
+      onOnlyAvailableChange={setOnlyAvailable}
     />
   );
 

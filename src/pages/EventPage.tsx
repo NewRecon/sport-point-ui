@@ -19,9 +19,18 @@ const EventPage: React.FC = () => {
   const currentUser = getCurrentUser();
   const currentUserId = currentUser?.USER_ID ?? null;
 
+  const subscriptionsCount = event?.eventSubscriptions?.length ?? 0;
   const isSubscribed = !!event?.eventSubscriptions?.some(
     (sub) => sub.userId === currentUserId
   );
+  const isFull = !!event && subscriptionsCount >= event.totalParticipants;
+  const isButtonDisabled = isSubscribed || isFull;
+
+  const buttonText = isSubscribed
+    ? 'Вы уже записаны на событие'
+    : isFull
+      ? 'Мест больше нет'
+      : 'Записаться на событие';
 
   useEffect(() => {
     if (!id) return;
@@ -85,8 +94,8 @@ const EventPage: React.FC = () => {
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Title level={4} style={{ margin: 0 }}>Участники</Title>
-                <Tag color="blue">
-                  {event.eventSubscriptions?.length || 0} / {event.totalParticipants}
+                <Tag color={isFull ? 'red' : 'blue'}>
+                  {subscriptionsCount} / {event.totalParticipants}
                 </Tag>
               </div>
 
@@ -142,11 +151,11 @@ const EventPage: React.FC = () => {
               <Button
                 type="primary"
                 block
-                disabled={isSubscribed}
+                disabled={isButtonDisabled}
                 style={{ marginTop: '16px' }}
                 onClick={() => onSubscribeSubmit({ eventId: event.id })}
               >
-                {isSubscribed ? 'Вы уже записаны на событие' : 'Записаться на событие'}
+                {buttonText}
               </Button>
 
             </Space>

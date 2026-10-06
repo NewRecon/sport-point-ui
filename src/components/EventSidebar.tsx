@@ -16,6 +16,8 @@ interface EventSidebarProps {
   onCategoryChange: (category: string | null) => void;
   dateRange: DateRangeType | null;
   onDateRangeChange: (dates: DateRangeType | null) => void;
+  onlyAvailable: boolean;
+  onOnlyAvailableChange: (value: boolean) => void;
 }
 
 const getCategoryLabel = (category: string) => {
@@ -35,6 +37,8 @@ export const EventSidebar: React.FC<EventSidebarProps> = ({
   onCategoryChange,
   dateRange,
   onDateRangeChange,
+  onlyAvailable,
+  onOnlyAvailableChange,
 }) => {
   const navigate = useNavigate();
   const screens = Grid.useBreakpoint();
@@ -63,6 +67,8 @@ export const EventSidebar: React.FC<EventSidebarProps> = ({
               onCategoryChange={onCategoryChange}
               dateRange={dateRange}
               onDateRangeChange={onDateRangeChange}
+              onlyAvailable={onlyAvailable}
+              onOnlyAvailableChange={onOnlyAvailableChange}
             />
           </div>
         </Flex>

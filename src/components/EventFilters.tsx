@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select, DatePicker, Button, Dropdown, Badge } from 'antd';
+import { Select, DatePicker, Button, Dropdown, Badge, Checkbox } from 'antd';
 import { FilterOutlined } from '@ant-design/icons';
 import type { Dayjs } from 'dayjs';
 
@@ -20,6 +20,8 @@ interface EventFiltersProps {
     onCategoryChange: (category: string | null) => void;
     dateRange: DateRangeType | null;
     onDateRangeChange: (dates: DateRangeType | null) => void;
+    onlyAvailable: boolean;
+    onOnlyAvailableChange: (value: boolean) => void;
 }
 
 export const EventFilters: React.FC<EventFiltersProps> = ({
@@ -27,15 +29,22 @@ export const EventFilters: React.FC<EventFiltersProps> = ({
     onCategoryChange,
     dateRange,
     onDateRangeChange,
+    onlyAvailable,
+    onOnlyAvailableChange,
 }) => {
     const handleClear = (e: React.MouseEvent) => {
         e.stopPropagation();
         onCategoryChange(null);
         onDateRangeChange(null);
+        onOnlyAvailableChange(false);
     };
 
-    const hasFilters = selectedCategory !== null || dateRange !== null;
-    const activeFiltersCount = [selectedCategory !== null, dateRange !== null].filter(Boolean).length;
+    const hasFilters = selectedCategory !== null || dateRange !== null || onlyAvailable;
+    const activeFiltersCount = [
+        selectedCategory !== null,
+        dateRange !== null,
+        onlyAvailable,
+    ].filter(Boolean).length;
 
     const dropdownContent = (
         <div
@@ -82,6 +91,13 @@ export const EventFilters: React.FC<EventFiltersProps> = ({
                     }}
                 />
             </div>
+
+            <Checkbox
+                checked={onlyAvailable}
+                onChange={(e) => onOnlyAvailableChange(e.target.checked)}
+            >
+                Только со свободными местами
+            </Checkbox>
 
             {hasFilters && (
                 <Button type="primary" danger ghost onClick={handleClear} style={{ marginTop: '4px' }}>

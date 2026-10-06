@@ -81,8 +81,6 @@ export const EventMap: React.FC<EventMapProps> = ({
             <Popup
               eventHandlers={{
                 remove: () => {
-                  // Срабатывает, когда попап закрывается — в т.ч. по встроенному крестику Leaflet.
-                  // Сбрасываем выбранные координаты, чтобы маркер исчез.
                   onClearSelected();
                 },
               }}

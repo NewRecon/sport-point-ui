@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { message } from 'antd';
+import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import { eventService } from '../api/eventService';
 import type { EventData } from '../api/eventService';
@@ -14,12 +15,14 @@ export interface MapEventsDataResult {
   selectedCoords: [number, number] | null;
   selectedCategory: string | null;
   dateRange: DateRangeType | null;
+  onlyAvailable: boolean;
   address: string;
   loadingAddress: boolean;
   setIsModalOpen: (open: boolean) => void;
   setSelectedCoords: (coords: [number, number] | null) => void;
   setSelectedCategory: (category: string | null) => void;
   setDateRange: (dates: DateRangeType | null) => void;
+  setOnlyAvailable: (value: boolean) => void;
   setAddress: (address: string) => void;
   clearSelectedCoords: () => void;
   handleCreateSubmit: (values: CreateEventFormValues) => Promise<void>;
@@ -27,7 +30,16 @@ export interface MapEventsDataResult {
   openModalWithCoords: () => Promise<void>;
 }
 
-export const useMapEventsData = (): MapEventsDataResult => {
+export interface MapEventsInitialFilters {
+  category?: string | null;
+  dateFrom?: string | null;
+  dateTo?: string | null;
+  onlyAvailable?: boolean;
+}
+
+export const useMapEventsData = (
+  initialFilters: MapEventsInitialFilters = {}
+): MapEventsDataResult => {
   const [loading, setLoading] = useState<boolean>(true);
   const [events, setEvents] = useState<EventData[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -36,8 +48,17 @@ export const useMapEventsData = (): MapEventsDataResult => {
   const [address, setAddress] = useState<string>('');
   const [loadingAddress, setLoadingAddress] = useState<boolean>(false);
 
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [dateRange, setDateRange] = useState<DateRangeType | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(
+    initialFilters.category ?? null
+  );
+  const [dateRange, setDateRange] = useState<DateRangeType | null>(
+    initialFilters.dateFrom && initialFilters.dateTo
+      ? [dayjs(initialFilters.dateFrom), dayjs(initialFilters.dateTo)]
+      : null
+  );
+  const [onlyAvailable, setOnlyAvailable] = useState<boolean>(
+    initialFilters.onlyAvailable ?? false
+  );
   const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
 
   useEffect(() => {
@@ -53,6 +74,7 @@ export const useMapEventsData = (): MapEventsDataResult => {
           category: selectedCategory,
           dateFrom: startDayjs ? startDayjs.startOf('day').format('YYYY-MM-DDTHH:mm:ss') : null,
           dateTo: endDayjs ? endDayjs.endOf('day').format('YYYY-MM-DDTHH:mm:ss') : null,
+          onlyAvailable: onlyAvailable || null,
         };
 
         const data = await eventService.getAllEvents(filters);
@@ -77,7 +99,7 @@ export const useMapEventsData = (): MapEventsDataResult => {
     return () => {
       ignore = true;
     };
-  }, [selectedCategory, dateRange, refreshTrigger]);
+  }, [selectedCategory, dateRange, onlyAvailable, refreshTrigger]);
 
   const fetchAddressFromCoords = async (lat: number, lng: number) => {
     setLoadingAddress(true);
@@ -168,12 +190,14 @@ export const useMapEventsData = (): MapEventsDataResult => {
     selectedCoords,
     selectedCategory,
     dateRange,
+    onlyAvailable,
     address,
     loadingAddress,
     setIsModalOpen,
     setSelectedCoords,
     setSelectedCategory,
     setDateRange,
+    setOnlyAvailable,
     setAddress,
     clearSelectedCoords,
     handleCreateSubmit,

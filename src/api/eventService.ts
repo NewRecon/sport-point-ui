@@ -24,6 +24,7 @@ export interface EventFilterParams {
   category?: string | null;
   dateFrom?: string | null;
   dateTo?: string | null;
+  onlyAvailable?: boolean | null;
 }
 
 export interface CreateEventPayload {
@@ -46,6 +47,7 @@ export const eventService = {
       if (filters.category) queryParams.append('category', filters.category);
       if (filters.dateFrom) queryParams.append('dateFrom', filters.dateFrom);
       if (filters.dateTo) queryParams.append('dateTo', filters.dateTo);
+      if (filters.onlyAvailable) queryParams.append('onlyAvailable', 'true');
     }
 
     const queryString = queryParams.toString();
