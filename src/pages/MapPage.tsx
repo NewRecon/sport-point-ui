@@ -1,31 +1,11 @@
 import React, { useState } from 'react';
-import { Spin, Flex, Grid, Button, Drawer } from 'antd'; // Добавили Button и Drawer
+import { Spin, Flex, Grid, Button, Drawer } from 'antd';
 import { UnorderedListOutlined } from '@ant-design/icons';
-import type { Dayjs } from 'dayjs';
 import { Navigation } from '../components/Navigation';
 import { EventMap } from '../components/EventMap';
 import { EventSidebar } from '../components/EventSidebar';
 import { CreateEventModal } from '../components/CreateEventModal';
-import type { CreateEventFormValues } from '../components/CreateEventModal';
-import type { EventData } from '../api/eventService';
 import { useMapEventsData } from '../hooks/useMapEventsData';
-
-type DateRangeType = [Dayjs | null, Dayjs | null];
-
-interface MapEventsDataResult {
-  loading: boolean;
-  events: EventData[];
-  isModalOpen: boolean;
-  selectedCoords: [number, number] | null;
-  selectedCategory: string | null;
-  dateRange: DateRangeType | null;
-  setIsModalOpen: (open: boolean) => void;
-  setSelectedCoords: (coords: [number, number] | null) => void;
-  setSelectedCategory: (category: string | null) => void;
-  setDateRange: (dates: DateRangeType | null) => void;
-  handleCreateSubmit: (values: CreateEventFormValues) => Promise<void>;
-  openModalWithDefaultCoords: () => void;
-}
 
 const MapPage: React.FC = () => {
   const {
@@ -35,21 +15,22 @@ const MapPage: React.FC = () => {
     selectedCoords,
     selectedCategory,
     dateRange,
+    address,
+    loadingAddress,
     setIsModalOpen,
     setSelectedCoords,
     setSelectedCategory,
     setDateRange,
+    setAddress,
     handleCreateSubmit,
     openModalWithDefaultCoords,
-  } = useMapEventsData() as MapEventsDataResult;
+    openModalWithCoords,
+  } = useMapEventsData();
 
   const screens = Grid.useBreakpoint();
   const isDesktop = screens.md;
-
-  // Состояние для открытия шторки на мобилках
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
 
-  // Вынесем сайдбар в отдельную переменную, чтобы не дублировать код для десктопа и мобилки
   const sidebarContent = (
     <EventSidebar 
       events={events} 
@@ -77,7 +58,7 @@ const MapPage: React.FC = () => {
               events={events} 
               selectedCoords={selectedCoords} 
               onMapClick={(coords) => setSelectedCoords(coords)} 
-              onCreateAtCoords={() => setIsModalOpen(true)} 
+              onCreateAtCoords={openModalWithCoords}
             />
           </div>
 
@@ -134,7 +115,15 @@ const MapPage: React.FC = () => {
         </div>
       )}
 
-      <CreateEventModal open={isModalOpen} onCancel={() => setIsModalOpen(false)} onSubmit={handleCreateSubmit} />
+      <CreateEventModal 
+        open={isModalOpen} 
+        initialAddress={loadingAddress ? "Определяем адрес..." : address}
+        onCancel={() => {
+          setIsModalOpen(false);
+          setAddress('');
+        }} 
+        onSubmit={handleCreateSubmit} 
+      />
     </div>
   );
 };

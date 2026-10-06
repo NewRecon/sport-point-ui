@@ -9,6 +9,3 @@ createRoot(document.getElementById('root')!).render(
     <App />
   </StrictMode>,
 )
-
-// npm install && npm install antd
-// npm uninstall antd

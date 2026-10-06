@@ -75,7 +75,6 @@ export const EventFilters: React.FC<EventFiltersProps> = ({
                         if (!dates) {
                             onDateRangeChange(null);
                         } else {
-                            // ИСПРАВЛЕНО: Добавлено приведение через unknown, чтобы удовлетворить строгий компилятор TypeScript
                             const startDate = dates[0] as unknown as Dayjs | null;
                             const endDate = dates[1] as unknown as Dayjs | null;
                             onDateRangeChange([startDate, endDate]);
@@ -106,8 +105,8 @@ export const EventFilters: React.FC<EventFiltersProps> = ({
                     style={{
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'center', // Чтобы текст был по центру
-                        width: '100%' // Растягиваем на мобилках
+                        justifyContent: 'center',
+                        width: '100%'
                     }}
                 >
                     {hasFilters ? "Фильтры активны" : "Фильтры"}

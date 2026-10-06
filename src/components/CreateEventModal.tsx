@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Modal, Form, Input, DatePicker, InputNumber, Select } from 'antd';
 import type { Dayjs } from 'dayjs';
 
@@ -23,10 +23,22 @@ interface CreateEventModalProps {
   open: boolean;
   onCancel: () => void;
   onSubmit: (values: CreateEventFormValues) => void;
+  initialAddress?: string;
 }
 
-export const CreateEventModal: React.FC<CreateEventModalProps> = ({ open, onCancel, onSubmit }) => {
+export const CreateEventModal: React.FC<CreateEventModalProps> = ({ 
+  open, 
+  onCancel, 
+  onSubmit, 
+  initialAddress 
+}) => {
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (open) {
+      form.setFieldsValue({ locationName: initialAddress || '' });
+    }
+  }, [initialAddress, open, form]);
 
   const handleOk = (): void => {
     form.submit();

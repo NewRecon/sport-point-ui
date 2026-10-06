@@ -17,7 +17,6 @@ const DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-// Иконка для новой временной точки (сделаем её зеленой/красной через фильтр, либо оставим дефолтной)
 const NewLocationIcon = L.icon({
   iconUrl: iconUrl,
   shadowUrl: shadowUrl,
@@ -35,7 +34,6 @@ interface EventMapProps {
   onCreateAtCoords: () => void;
 }
 
-// Внутренний мини-компонент для перехвата событий карты
 const MapClickHandler: React.FC<{ onMapClick: (coords: [number, number]) => void }> = ({ onMapClick }) => {
   useMapEvents({
     click(e) {
@@ -57,10 +55,8 @@ export const EventMap: React.FC<EventMapProps> = ({ events, selectedCoords, onMa
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         
-        {/* Слушатель кликов */}
         <MapClickHandler onMapClick={onMapClick} />
 
-        {/* Существующие маркеры */}
         {events.map((event) => (
           <Marker key={event.id} position={[event.latitude, event.longitude]}>
             <Popup>
@@ -73,7 +69,6 @@ export const EventMap: React.FC<EventMapProps> = ({ events, selectedCoords, onMa
           </Marker>
         ))}
 
-        {/* Временный маркер в месте клика */}
         {selectedCoords && (
           <Marker position={selectedCoords} icon={NewLocationIcon}>
             <Popup>

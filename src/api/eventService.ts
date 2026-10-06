@@ -26,7 +26,6 @@ export interface EventFilterParams {
 }
 
 export const eventService = {
-  // 1. Получение ВСЕХ ивентов для карты и бокового списка
   async getAllEvents(filters?: EventFilterParams): Promise<EventData[]> {
     const queryParams = new URLSearchParams();
 
@@ -55,7 +54,6 @@ export const eventService = {
     return data;
   },
 
-  // 2. Получение одного ивента
   async getEventById(id: string): Promise<EventData> {
     const response = await fetch(`${API_BASE_URL}/events/${id}`, {
       method: 'GET',
@@ -69,7 +67,6 @@ export const eventService = {
     return data;
   },
 
-  // 3. Метод создания нового ивента
   async createEvent(
     event: Omit<EventData, 'id' | 'ownerId' | 'eventSubscriptions'>
   ): Promise<EventData> {

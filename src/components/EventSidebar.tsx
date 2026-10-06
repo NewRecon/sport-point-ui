@@ -102,7 +102,6 @@ export const EventSidebar: React.FC<EventSidebarProps> = ({
           )
         }}
         renderItem={(event) => {
-          // Получаем настройки стиля тега для текущего ивента
           const categoryMeta = getCategoryLabel(event.category);
 
           return (
