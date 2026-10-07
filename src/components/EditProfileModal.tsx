@@ -68,8 +68,10 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
           name="bio"
         >
           <Input.TextArea 
-            rows={5} 
-            placeholder="Расскажите что-нибудь о себе..." 
+            rows={5}
+            placeholder="Расскажите что-нибудь о себе..."
+            maxLength={255}
+            showCount 
           />
         </Form.Item>
 

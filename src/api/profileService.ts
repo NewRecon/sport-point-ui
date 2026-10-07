@@ -1,9 +1,17 @@
 import { API_BASE_URL, getHeaders } from './config';
 
+export interface ProfileEventItem {
+  eventId: string;
+  eventTitle: string;
+}
+
 export interface UserProfileData {
+  userId?: string;
   name: string;
   bio: string;
   email: string;
+  profileEventsOwner?: ProfileEventItem[];
+  profileEventsNotOwner?: ProfileEventItem[];
 }
 
 export const profileService = {
@@ -51,5 +59,5 @@ export const profileService = {
     }
 
     return data;
-  }
+  },
 };

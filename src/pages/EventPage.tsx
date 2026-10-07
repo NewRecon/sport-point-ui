@@ -153,7 +153,7 @@ const EventPage: React.FC = () => {
                 block
                 disabled={isButtonDisabled}
                 style={{ marginTop: '16px' }}
-                onClick={() => onSubscribeSubmit({ eventId: event.id })}
+                onClick={() => onSubscribeSubmit({ eventId: event.id, eventTitle: event.title })}
               >
                 {buttonText}
               </Button>

@@ -3,6 +3,7 @@ import { Card, List, Typography, Badge, Empty, Flex, Grid, Tag } from 'antd';
 import { CalendarOutlined, EnvironmentOutlined, TeamOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import type { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import type { EventData } from '../api/eventService';
 import { EventFilters } from './EventFilters';
 
@@ -102,7 +103,7 @@ export const EventSidebar: React.FC<EventSidebarProps> = ({
               </div>
 
               <div style={{ marginTop: '6px', color: '#8c8c8c', fontSize: '12px' }}>
-                <div><CalendarOutlined /> {event.date}</div>
+                <span><CalendarOutlined /> {dayjs(event.date).format('DD.MM.YYYY HH:mm')}</span>
                 <div style={{ marginTop: '2px' }}><EnvironmentOutlined /> {event.locationName}</div>
               </div>
 

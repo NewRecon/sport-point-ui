@@ -2,6 +2,7 @@ import { API_BASE_URL, getHeaders } from './config';
 
 export interface SubscriptionData {
   eventId: string;
+  eventTitle: string;
 }
 
 export const subscriptionService = {
