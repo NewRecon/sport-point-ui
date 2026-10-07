@@ -2,7 +2,7 @@ import { API_BASE_URL, getHeaders } from './config';
 
 export interface EventSubscription {
   userId: string;
-  username: string;
+  name: string;
 }
 
 export interface EventData {

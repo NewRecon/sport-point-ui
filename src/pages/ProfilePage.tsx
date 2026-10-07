@@ -46,11 +46,10 @@ const ProfilePage: React.FC = () => {
           ) : user ? (
             <Space direction="vertical" size="large" style={{ width: '100%' }}>
               <Title level={3} style={{ margin: 0 }}>
-                {isOwnProfile ? 'Мой профиль' : `Профиль: ${user.name}`}
+                {user.name}
               </Title>
 
               <Descriptions bordered column={1} size="middle">
-                <Descriptions.Item label="Имя">{user.name}</Descriptions.Item>
                 <Descriptions.Item label="Email">{user.email}</Descriptions.Item>
                 <Descriptions.Item label="Описание">{user.bio}</Descriptions.Item>
               </Descriptions>

@@ -120,7 +120,7 @@ const EventPage: React.FC = () => {
                             }}
                           >
                             <UserOutlined />
-                            {sub.username}
+                            {sub.name}
                             <Tag color="green" style={{ marginLeft: '4px' }}>вы</Tag>
                           </span>
                         ) : (
@@ -135,7 +135,7 @@ const EventPage: React.FC = () => {
                             }}
                           >
                             <UserOutlined />
-                            {sub.username}
+                            {sub.name}
                           </Link>
                         )}
                       </List.Item>

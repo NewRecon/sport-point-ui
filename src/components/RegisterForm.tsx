@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Input, Button } from 'antd';
 
 export interface RegisterValues {
+  username: string;
   name: string;
   email: string;
   password?: string;
@@ -20,6 +21,14 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
         rules={[{ required: true, message: 'Введите логин!' }]}
       >
         <Input placeholder="Придумайте логин" />
+      </Form.Item>
+
+      <Form.Item
+        label="Имя"
+        name="name"
+        rules={[{ required: true, message: 'Введите Имя!' }]}
+      >
+        <Input placeholder="Введите имя" />
       </Form.Item>
 
       <Form.Item
