@@ -51,6 +51,7 @@ const ProfilePage: React.FC = () => {
 
               <Descriptions bordered column={1} size="middle">
                 <Descriptions.Item label="Имя">{user.name}</Descriptions.Item>
+                <Descriptions.Item label="Email">{user.email}</Descriptions.Item>
                 <Descriptions.Item label="Описание">{user.bio}</Descriptions.Item>
               </Descriptions>
 

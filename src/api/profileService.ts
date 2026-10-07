@@ -3,6 +3,7 @@ import { API_BASE_URL, getHeaders } from './config';
 export interface UserProfileData {
   name: string;
   bio: string;
+  email: string;
 }
 
 export const profileService = {

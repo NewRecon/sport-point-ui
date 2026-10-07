@@ -2,13 +2,10 @@ import React from 'react';
 import { Card, Tabs, message } from 'antd';
 import type { TabsProps } from 'antd';
 import { useNavigate } from 'react-router-dom';
-
 import { LoginForm } from '../components/LoginForm';
 import type { LoginValues } from '../components/LoginForm';
-
 import { RegisterForm } from '../components/RegisterForm';
 import type { RegisterValues } from '../components/RegisterForm';
-
 import { authService } from '../api/authService';
 
 const AuthPage: React.FC = () => {
