@@ -4,6 +4,7 @@ import AuthPage from './pages/AuthPage';
 import ProfilePage from './pages/ProfilePage';
 import EventPage from './pages/EventPage';
 import MapPage from './pages/MapPage';
+import PrivacyPage from './pages/PrivacyPage';
 
 const App: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ const App: React.FC = () => {
         <Route path="/profile/:userId" element={<ProfilePage />} />
         <Route path="/event/:id" element={<EventPage />} />
         <Route path="/map" element={<MapPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
       </Routes>
     </Router>
   );

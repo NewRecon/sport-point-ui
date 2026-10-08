@@ -1,11 +1,12 @@
 import React from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Checkbox } from 'antd';
 
 export interface RegisterValues {
   username: string;
   name: string;
   email: string;
   password?: string;
+  privacyConsent: boolean;
 }
 
 interface RegisterFormProps {
@@ -45,6 +46,36 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
         rules={[{ required: true, min: 6, message: 'Пароль должен быть от 6 символов!' }]}
       >
         <Input.Password placeholder="Придумайте пароль" />
+      </Form.Item>
+
+      <Form.Item
+        name="privacyConsent"
+        valuePropName="checked"
+        rules={[
+          {
+            validator: (_, value) =>
+              value
+                ? Promise.resolve()
+                : Promise.reject(
+                    new Error(
+                      'Необходимо согласие на обработку персональных данных'
+                    )
+                  ),
+          },
+        ]}
+        style={{ marginBottom: 16 }}
+      >
+        <Checkbox>
+          Я согласен на обработку персональных данных в соответствии с{' '}
+          <a
+            href="/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+          >
+            политикой конфиденциальности
+          </a>
+        </Checkbox>
       </Form.Item>
 
       <Form.Item>
