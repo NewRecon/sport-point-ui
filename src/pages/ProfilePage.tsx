@@ -9,6 +9,7 @@ import { Navigation } from '../components/Navigation';
 import { profileService } from '../api/profileService';
 import type { UserProfileData, ProfileEventItem } from '../api/profileService';
 import { EditProfileModal } from '../components/EditProfileModal';
+import { ProfileAvatar } from '../components/ProfileAvatar';
 
 const { Title } = Typography;
 
@@ -98,7 +99,20 @@ const ProfilePage: React.FC = () => {
               {/* === Карточка профиля === */}
               <Card style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
                 <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-                  <Title level={3} style={{ margin: 0 }}>{user.name}</Title>
+                  <ProfileAvatar
+                    objectName={user.avatarObjectName}
+                    editable={isOwnProfile}
+                    onUploaded={(newName) =>
+                      setUser((prev) =>
+                        prev ? { ...prev, avatarObjectName: newName } : prev
+                      )
+                    }
+                    size={120}
+                  />
+
+                  <Title level={3} style={{ margin: 0, textAlign: 'center' }}>
+                    {user.name}
+                  </Title>
 
                   <Descriptions bordered column={1} size="middle">
                     <Descriptions.Item label="Email">{user.email}</Descriptions.Item>
